@@ -63,7 +63,7 @@ const SearchBar = () => {
             />
             <button 
               type="submit" 
-              className='absolute right-1 top-1/2 -translate-y-1/2 p-4 bg-slate-900 rounded-full'
+              className='absolute right-1 top-1/2 -translate-y-1/2 p-4 rounded-full'
             >
               <div style={{ backgroundColor: "#fff", borderRadius: "50%", padding: "8px" }}>
                 <AiOutlineSearch />
@@ -75,7 +75,7 @@ const SearchBar = () => {
         
           {product1Results.length > 0 && product1Results.map((item, i) => (
             
-            <div key={i} className="relative w-full sm:w-auto md:w-auto lg:w-auto rounded overflow-hidden border border-gray-300 border-bevel border-green-500 shadow-md transition duration-300 ease-in-out transform hover:shadow-lg hover:border-transparent hover:border-gray-450 hover:scale-102" style={{ maxWidth: "40rem",backgroundColor: "#000", color: "#000" }}>
+            <div key={i} className="relative w-full sm:w-auto md:w-auto lg:w-auto rounded overflow-hidden border border-gray-300 border-bevel border-green-500 shadow-md transition duration-300 ease-in-out transform hover:shadow-lg hover:border-transparent hover:border-gray-450 hover:scale-102" style={{ maxWidth: "40rem",backgroundColor: "#fff", color: "#000" }}>
              <h1> Result: {searchTerm} of Database1</h1>
               <div className="h-72">
               
@@ -112,7 +112,7 @@ const SearchBar = () => {
         <h1> Result: {searchTerm} of Database2</h1>
         <div>
           {product2Results.length > 0 && product2Results.map((item, i) => (
-            <div key={i} className="relative w-full sm:w-auto md:w-auto lg:w-auto rounded overflow-hidden border border-gray-300 border-bevel border-green-500 shadow-md transition duration-300 ease-in-out transform hover:shadow-lg hover:border-transparent hover:border-gray-450 hover:scale-102" style={{ maxWidth: "40rem",backgroundColor: "#000", color: "#000" }}>
+            <div key={i} className="relative w-full sm:w-auto md:w-auto lg:w-auto rounded overflow-hidden border border-gray-300 border-bevel border-green-500 shadow-md transition duration-300 ease-in-out transform hover:shadow-lg hover:border-transparent hover:border-gray-450 hover:scale-102" style={{ maxWidth: "40rem",backgroundColor: "#fff", color: "#000" }}>
               <div className="h-72">
                 <h1>{item.title}</h1>
                 <Slider {...settings}>
