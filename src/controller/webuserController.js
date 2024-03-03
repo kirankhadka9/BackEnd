@@ -1,15 +1,13 @@
-import { Webuser } from "../schema/model.js";
+import { WebUser} from "../schema/model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { secretKey } from "../constant.js";
 import { sendEmail } from "../utilis/sendemail.js";
 
-// create webuser data
-
 export let createWebuser = async (req, res) => {
   try {
     let webuserData = req.body;
-    let hashPassword = await bcrypt.hash(webuserData.password, 10); //pw lai hash garyo.
+    let hashPassword = await bcrypt.hash(webuserData.password, 10); 
     // ayeko data + isVerifiedEmail+ hashPassword lai as a object data ma send garyo.
     // ... ayeko data sabai tesma rakhdinxa
     let data = {
@@ -19,7 +17,7 @@ export let createWebuser = async (req, res) => {
     };
 
     // let result = await Webuser.create(webuserData);
-    let result = await Webuser.create(data);
+    let result = await WebUser.create(data);
 
     //send mail with link after a registration
     //for purpose of making  isVerifiedEmail: false  to true so that we know that the user is genuine
@@ -80,7 +78,7 @@ export const verifyEmail = async (req, res, next) => {
 
     //set isVerifiedEmail: true of userId;
 
-    let result = await Webuser.findByIdAndUpdate(
+    let result = await WebUser.findByIdAndUpdate(
       userId, // k ko ?
       {
         isVerifiedEmail: true, // kun data ?
@@ -109,7 +107,7 @@ export const loginUser = async (req, res, next) => {
     // console.log(email , password)
     //find(gives all)(output in array) , findOne(gives only one from top of db)(output in object) :difference
 
-    let user = await Webuser.findOne({ email: email });
+    let user = await WebUser.findOne({ email: email });
     console.log(user);
 
     if (user) {
@@ -151,7 +149,7 @@ export const myProfile = async (req, res, next) => {
     //getting value passed from previous middleware.
     let _id = req._id;
 
-    let result = await Webuser.findById(_id);
+    let result = await WebUser.findById(_id);
 
     res.status(200).json({
       success: true,
@@ -176,7 +174,7 @@ export const profileUpdate = async (req, res, next) => {
     delete data.password;
     // console.log(data)
 
-    let result = await Webuser.findByIdAndUpdate(_id, data, { new: true });
+    let result = await WebUser.findByIdAndUpdate(_id, data, { new: true });
 
     res.status(201).json({
       success: true,
@@ -198,7 +196,7 @@ export const passwordUpdate = async (req, res, next) => {
     let oldPassword = req.body.oldPassword;
     let newPassword = req.body.newPassword;
 
-    let data = await Webuser.findById(_id);
+    let data = await WebUser.findById(_id);
     // console.log(data)
 
     let hashPassword = data.password;
@@ -209,7 +207,7 @@ export const passwordUpdate = async (req, res, next) => {
     if (isPasswordValid) {
       let newHashPassword = await bcrypt.hash(newPassword, 10);
 
-      let result = await Webuser.findByIdAndUpdate(
+      let result = await WebUser.findByIdAndUpdate(
         _id,
         { password: newHashPassword }, //yo matra update hunxa
         { new: true }
@@ -232,7 +230,7 @@ export const passwordUpdate = async (req, res, next) => {
 };
 
 export const readAllWebusers = async (req, res) => {
-  let result = await Webuser.find({});
+  let result = await WebUser.find({});
 
   try {
     res.status(200).json({
@@ -252,7 +250,7 @@ export const readSpecificWebuser = async (req, res) => {
   let id = req.params.id;
   // console.log(id)
   try {
-    let result = await Webuser.findById(id);
+    let result = await WebUser.findById(id);
 
     res.status(200).json({
       success: true,
@@ -275,7 +273,7 @@ export const updateSpecificUser = async (req, res) => {
     delete data.email;
     delete data.password;
 
-    let result = await Webuser.findByIdAndUpdate(id, data, { new: true });
+    let result = await WebUser.findByIdAndUpdate(id, data, { new: true });
     console.log(result);
     res.status(201).json({
       success: true,
@@ -293,7 +291,7 @@ export const deleteSpecificUser = async (req, res) => {
   let id = req.params.id;
   // console.log(id)
   try {
-    let result = await Webuser.findByIdAndDelete(id);
+    let result = await WebUser.findByIdAndDelete(id);
 
     res.status(200).json({
       success: true,
@@ -311,7 +309,7 @@ export const forgotPassword = async (req, res) => {
   try {
     let email = req.body.email;
 
-    let result = await Webuser.findOne({ email: email });
+    let result = await WebUser.findOne({ email: email });
 
     if (result) {
       //token generate
@@ -368,7 +366,7 @@ export const resetPassword = async (req, res) => {
     // let password = req.body.password
     let hashPassword = await bcrypt.hash(req.body.password, 10);
 
-    let result = await Webuser.findByIdAndUpdate(_id,
+    let result = await WebUser.findByIdAndUpdate(_id,
       {password:hashPassword},
       {new:true},)
 

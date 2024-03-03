@@ -1,11 +1,12 @@
-import { Webuser } from "../schema/model.js"
+import { WebUser } from "../schema/model.js"
+
 
 let authorized=(roles)=>{
     // roles=["Admin","super-admin"]
      return async (req,res,next)=>{
    try {
      let id=req._id
-     let result= await Webuser.findById(id)
+     let result= await WebUser.findById(id)
      console.log(result)
      let tokenRole=result.role
      if(roles.includes (tokenRole)){

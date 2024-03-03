@@ -38,44 +38,68 @@ export let createProduct = async (req, res) => {
   };
 
 
+  export const searchByName = async (req, res) => {
+    try {
+      const userInput = req.params.productName;
+      const products = await Product1.find({ title: { $regex: userInput, $options: 'i' } });
+      res.status(200).json(products);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, message: 'Error retrieving products' });
+    }
+  };
+  
+  export const createIndex= async (req, res) => {
+    try {
+      const userInput = req.params.productName;
+      const maxPrice = parseInt(req.query.maxPrice);
+  
+      if (isNaN(maxPrice) || maxPrice < 0) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid maxPrice parameter",
+        });
+      }
+  
+      const products = await Product1.find({
+        title: { $regex: userInput, $options: 'i' },
+        price: { $lte: maxPrice }
+      });
+  
+      res.status(200).json(products);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, message: 'Error retrieving products' });
+    }
+  };
+  
+  
+
+
 
   // export const searchByMin = async (req, res) => {
   //   try {
     
   //     const minPrice = parseInt(req.params.minPrice, 10);
       
-  //     // Check if minPrice is a valid number
+    // Check if minPrice is a valid number
   //     if (isNaN(minPrice)) {
   //       return res.status(400).json({ success: false, message: 'Invalid minPrice' });
   //     }
   
-  //     // Query products with price greater than or equal to minPrice
+     // Query products with price greater than or equal to minPrice
   //     const products = await Product1.find({ price: { $gte: minPrice } });
-  
-  //     // Send response with the products
+      // Send response with the products
   //     res.status(200).json(products);
   //   } catch (error) {
-  //     // Handle errors
+     // Handle errors
   //     console.error(error);
   //     res.status(500).json({ success: false, message: 'Server Error' });
   //   }
   // };
   
    ///
-   export const searchByName = async (req, res) => {
-    try {
-      const userInput = req.params.productName; 
-      // Query products with name similar to userInput
-      const products = await Product1.find({ title: { $regex: userInput, $options: 'i' } });
-      
-      // Send response with the products
-      res.status(200).json(products); // Sending the entire array of products
-    } catch (error) {
-      // Handle errors
-      console.error(error);
-      res.status(500).json({ success: false, message: 'Error retrieving products' });
-    }
-  };
+
   
   //read by product id
   export let readProduct = async (req, res) => {
@@ -119,7 +143,7 @@ export let createProduct = async (req, res) => {
   export let deleteProduct = async (req, res) => {
     let productId = req.params.productId;
     try {
-      let result = await Product1.findByIdAndDenlete(productId);
+      let result = await Product1.findByIdAndDelete(productId);
       res.status(200).json({
         success: true,
         message: "Product deleted successfully",

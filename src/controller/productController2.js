@@ -1,6 +1,7 @@
 import { Product2 } from "../schema/model.js";
 
 
+
 //create product data
 export let createProduct = async (req, res) => {
   let productData = req.body;
@@ -38,14 +39,34 @@ export let readAllProducts = async (req, res) => {
 };
 export const searchByName = async (req, res) => {
   try {
-    const userInput = req.params.productName; 
-    // Query products with name similar to userInput
+    const userInput = req.params.productName;
     const products = await Product2.find({ title: { $regex: userInput, $options: 'i' } });
-    
-    // Send response with the products
-    res.status(200).json(products); // Sending the entire array of products
+    res.status(200).json(products);
   } catch (error) {
-    // Handle errors
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Error retrieving products' });
+  }
+};
+
+export const createIndex= async (req, res) => {
+  try {
+    const userInput = req.params.productName;
+    const maxPrice = parseInt(req.query.maxPrice);
+
+    if (isNaN(maxPrice) || maxPrice < 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid maxPrice parameter",
+      });
+    }
+
+    const products = await Product2.find({
+      title: { $regex: userInput, $options: 'i' },
+      price: { $lte: maxPrice }
+    });
+
+    res.status(200).json(products);
+  } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: 'Error retrieving products' });
   }
@@ -93,7 +114,7 @@ export let updateProduct = async (req, res) => {
 export let deleteProduct = async (req, res) => {
   let productId = req.params.productId;
   try {
-    let result = await Product2.findByIdAndDenlete(productId);
+    let result = await Product2.findByIdAndDelete(productId);
     res.status(200).json({
       success: true,
       message: "Product deleted successfully",
